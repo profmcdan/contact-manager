@@ -36,7 +36,6 @@ class AddContact extends Component {
               <div className="card-body">
                 <form onSubmit={this.handleSubmit.bind(this, dispatch)}>
                   <TextInputGroup
-                    type="text"
                     name="name"
                     placeholder="Enter Name"
                     value={name}
@@ -52,7 +51,6 @@ class AddContact extends Component {
                     label="Email"
                   />
                   <TextInputGroup
-                    type="text"
                     name="phone"
                     placeholder="Enter Phone"
                     value={phone}
