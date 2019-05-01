@@ -8,16 +8,30 @@ class AddContact extends Component {
     name: "",
     phone: "",
     email: "",
+    errors: {},
   };
 
-  handleSubmit = (dispatch, e) => {
+  handleSubmit = async (dispatch, e) => {
     e.preventDefault();
     const id = uuidv4();
     const { name, email, phone } = this.state;
+    if (name === "") {
+      await this.setState({ errors: { name: "Name is required" } });
+      return;
+    }
+    if (email === "") {
+      await this.setState({ errors: { email: "Email is required" } });
+      return;
+    }
+    if (phone === "") {
+      await this.setState({ errors: { phone: "Phone is required" } });
+      return;
+    }
+
     const newContact = { id, name, email, phone };
     dispatch({ type: "ADD_CONTACT", payload: newContact });
     alert("New contact added");
-    this.setState({ name: "", phone: "", email: "" });
+    this.setState({ name: "", phone: "", email: "", errors: {} });
   };
 
   handleChange = e => {
@@ -25,7 +39,7 @@ class AddContact extends Component {
   };
 
   render() {
-    const { name, email, phone } = this.state;
+    const { name, email, phone, errors } = this.state;
     return (
       <Consumer>
         {value => {
@@ -41,6 +55,7 @@ class AddContact extends Component {
                     value={name}
                     onChange={this.handleChange}
                     label="Name"
+                    error={errors.name}
                   />
                   <TextInputGroup
                     type="email"
@@ -49,6 +64,7 @@ class AddContact extends Component {
                     value={email}
                     onChange={this.handleChange}
                     label="Email"
+                    error={errors.email}
                   />
                   <TextInputGroup
                     name="phone"
@@ -56,6 +72,7 @@ class AddContact extends Component {
                     value={phone}
                     onChange={this.handleChange}
                     label="Phone Number"
+                    error={errors.phone}
                   />
                   <button
                     type="submit"
