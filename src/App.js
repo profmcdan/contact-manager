@@ -5,7 +5,6 @@ import Header from "./components/common/Header";
 import Contacts from "./components/contact/Contacts";
 import { Provider } from "./context";
 import AddContact from "./components/contact/AddContact";
-import AddContactRef from "./components/contact/AddContactRef";
 
 class App extends React.Component {
   render() {
@@ -14,8 +13,7 @@ class App extends React.Component {
         <div className="">
           <Header branding="CManager" />
           <div className="container">
-            {/* <AddContact /> */}
-            <AddContactRef />
+            <AddContact />
             <Contacts />
           </div>
         </div>
