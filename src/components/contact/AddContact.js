@@ -30,8 +30,8 @@ class AddContact extends Component {
 
     const newContact = { id, name, email, phone };
     dispatch({ type: "ADD_CONTACT", payload: newContact });
-    alert("New contact added");
     this.setState({ name: "", phone: "", email: "", errors: {} });
+    this.props.history.push("/");
   };
 
   handleChange = e => {

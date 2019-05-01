@@ -12,17 +12,17 @@ const Header = ({ branding }) => (
         <ul className="navbar-nav mr-auto">
           <li className="nav-item">
             <Link to="/" className="nav-link">
-              Contacts
+              <i className="fas fa-home" /> Home
             </Link>
           </li>
           <li className="nav-item">
             <Link to="/add" className="nav-link">
-              New
+              <i className="fas fa-plus" /> New
             </Link>
           </li>
           <li className="nav-item">
             <Link to="/about" className="nav-link">
-              About
+              <i className="fas fa-question" /> About
             </Link>
           </li>
         </ul>

@@ -1,8 +1,11 @@
 import React from "react";
 
 const NotFound = () => (
-  <div>
-    <p className="lead">Not Found</p>
+  <div className="">
+    <h2 className=" display-4">
+      <span className="text-danger">404</span> Not Found
+    </h2>
+    <p className="lead">The page you have requested does not exist</p>
   </div>
 );
 
