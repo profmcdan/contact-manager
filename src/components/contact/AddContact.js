@@ -1,7 +1,10 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 // import { Consumer } from "../../context";
 import TextInputGroup from "../common/TextInputGroup";
-import Axios from "axios";
+import axios from "axios";
+import { addContact } from "../../actions/contactActions";
 
 class AddContact extends Component {
   state = {
@@ -27,16 +30,21 @@ class AddContact extends Component {
       return;
     }
 
+    const { addContact } = this.props;
+
     const newContact = { name, email, phone };
-    // Axios.post("https://jsonplaceholder.typicode.com/users", newContact)
-    //   .then(res => {
-    //     dispatch({ type: "ADD_CONTACT", payload: res.data });
-    //     this.setState({ name: "", phone: "", email: "", errors: {} });
-    //     this.props.history.push("/");
-    //   })
-    //   .catch(error => {
-    //     console.log(error);
-    //   });
+
+    try {
+      const { data } = await axios.post(
+        "https://jsonplaceholder.typicode.com/users",
+        newContact,
+      );
+      addContact(data);
+      this.setState({ name: "", phone: "", email: "", errors: {} });
+      this.props.history.push("/");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   handleChange = e => {
@@ -49,7 +57,7 @@ class AddContact extends Component {
       <div className="card mb-3">
         <div className="card-header">Add Contact</div>
         <div className="card-body">
-          <form onSubmit={this.handleSubmit.bind}>
+          <form onSubmit={this.handleSubmit}>
             <TextInputGroup
               name="name"
               placeholder="Enter Name"
@@ -88,4 +96,11 @@ class AddContact extends Component {
   }
 }
 
-export default AddContact;
+AddContact.propTypes = {
+  addContact: PropTypes.func.isRequired,
+};
+
+export default connect(
+  null,
+  { addContact },
+)(AddContact);

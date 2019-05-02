@@ -1,7 +1,10 @@
 import React, { Component } from "react";
 // import { Consumer } from "../../context";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { updateContact } from "../../actions/contactActions";
 import TextInputGroup from "../common/TextInputGroup";
-import Axios from "axios";
+import axios from "axios";
 
 class EditContact extends Component {
   state = {
@@ -15,7 +18,7 @@ class EditContact extends Component {
   async componentDidMount() {
     const { id } = this.props.match.params;
     try {
-      const { data } = await Axios.get(
+      const { data } = await axios.get(
         `https://jsonplaceholder.typicode.com/users/${id}`,
       );
       const contact = data;
@@ -47,15 +50,18 @@ class EditContact extends Component {
     }
 
     const updateContact = { name, email, phone };
-    // Axios.put(`https://jsonplaceholder.typicode.com/users/${id}`, updateContact)
-    //   .then(res => {
-    //     dispatch({ type: "UPDATE_CONTACT", payload: res.data });
-    //     this.setState({ name: "", phone: "", email: "", errors: {} });
-    //     this.props.history.push("/");
-    //   })
-    //   .catch(error => {
-    //     console.log(error);
-    //   });
+    try {
+      const { data } = await axios.put(
+        `https://jsonplaceholder.typicode.com/users/${id}`,
+        updateContact,
+      );
+      console.log(data);
+      this.props.updateContact(data);
+      this.setState({ name: "", phone: "", email: "", errors: {} });
+      this.props.history.push("/");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   handleChange = e => {
@@ -68,7 +74,7 @@ class EditContact extends Component {
       <div className="card mb-3">
         <div className="card-header">Edit Contact</div>
         <div className="card-body">
-          <form onSubmit={this.handleSubmit.bind}>
+          <form onSubmit={this.handleSubmit}>
             <TextInputGroup
               name="name"
               placeholder="Enter Name"
@@ -107,4 +113,11 @@ class EditContact extends Component {
   }
 }
 
-export default EditContact;
+EditContact.propTypes = {
+  updateContact: PropTypes.func.isRequired,
+};
+
+export default connect(
+  null,
+  { updateContact },
+)(EditContact);

@@ -1,8 +1,10 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 // import { Consumer } from "../../context";
 import axios from "axios";
+import { deleteContact } from "../../actions/contactActions";
 
 class Contact extends Component {
   state = {
@@ -13,11 +15,14 @@ class Contact extends Component {
     this.setState({ showContactInfo: !this.state.showContactInfo });
   };
 
-  onDeleteClick = id => {
-    // axios
-    //   .delete(`https://jsonplaceholder.typicode.com/users/${id}`)
-    //   .then(res => dispatch({ type: "DELETE_CONTACT", payload: id }))
-    //   .catch(error => console.log("An error occred"));
+  onDeleteClick = async id => {
+    const { deleteContact } = this.props;
+    try {
+      axios.delete(`https://jsonplaceholder.typicode.com/users/${id}`);
+      deleteContact(id);
+    } catch (error) {
+      console.log("An error occred");
+    }
   };
 
   render() {
@@ -63,6 +68,10 @@ class Contact extends Component {
 
 Contact.propTypes = {
   contact: PropTypes.object.isRequired,
+  deleteContact: PropTypes.func.isRequired,
 };
 
-export default Contact;
+export default connect(
+  null,
+  { deleteContact },
+)(Contact);
