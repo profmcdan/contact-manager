@@ -3,17 +3,36 @@ import { Consumer } from "../../context";
 import TextInputGroup from "../common/TextInputGroup";
 import Axios from "axios";
 
-class AddContact extends Component {
+class EditContact extends Component {
   state = {
+    id: null,
     name: "",
     phone: "",
     email: "",
     errors: {},
   };
 
+  async componentDidMount() {
+    const { id } = this.props.match.params;
+    try {
+      const { data } = await Axios.get(
+        `https://jsonplaceholder.typicode.com/users/${id}`,
+      );
+      const contact = data;
+      this.setState({
+        name: contact.name,
+        email: contact.email,
+        phone: contact.phone,
+        id: contact.id,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   handleSubmit = async (dispatch, e) => {
     e.preventDefault();
-    const { name, email, phone } = this.state;
+    const { name, email, phone, id } = this.state;
     if (name === "") {
       await this.setState({ errors: { name: "Name is required" } });
       return;
@@ -27,10 +46,10 @@ class AddContact extends Component {
       return;
     }
 
-    const newContact = { name, email, phone };
-    Axios.post("https://jsonplaceholder.typicode.com/users", newContact)
+    const updateContact = { name, email, phone };
+    Axios.put(`https://jsonplaceholder.typicode.com/users/${id}`, updateContact)
       .then(res => {
-        dispatch({ type: "ADD_CONTACT", payload: res.data });
+        dispatch({ type: "UPDATE_CONTACT", payload: res.data });
         this.setState({ name: "", phone: "", email: "", errors: {} });
         this.props.history.push("/");
       })
@@ -51,7 +70,7 @@ class AddContact extends Component {
           const { dispatch } = value;
           return (
             <div className="card mb-3">
-              <div className="card-header">Add Contact</div>
+              <div className="card-header">Edit Contact</div>
               <div className="card-body">
                 <form onSubmit={this.handleSubmit.bind(this, dispatch)}>
                   <TextInputGroup
@@ -83,7 +102,7 @@ class AddContact extends Component {
                     type="submit"
                     className="btn btn-block btn-light btn-lg mr-auto"
                   >
-                    Submit
+                    Update Contact
                   </button>
                 </form>
               </div>
@@ -95,4 +114,4 @@ class AddContact extends Component {
   }
 }
 
-export default AddContact;
+export default EditContact;
