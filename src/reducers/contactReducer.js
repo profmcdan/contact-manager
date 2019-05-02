@@ -1,17 +1,18 @@
-import { contacts } from "../components/contact/db";
+// import { contacts } from "../components/contact/db";
 import {
   GET_CONTACTS,
   ADD_CONTACT,
   UPDATE_CONTACT,
   DELETE_CONTACT,
 } from "../actions/types";
+import { ERROR } from "jest-validate/build/utils";
 
-const initialState = { contacts };
+const initialState = { contacts: [] };
 
 const contactRecuder = (state = initialState, action) => {
   switch (action.type) {
     case GET_CONTACTS:
-      return { ...state };
+      return { ...state, contacts: action.payload };
     case ADD_CONTACT:
       return {
         ...state,
@@ -30,6 +31,11 @@ const contactRecuder = (state = initialState, action) => {
         contacts: state.contacts.filter(
           contact => contact.id !== action.payload,
         ),
+      };
+    case ERROR:
+      return {
+        ...state,
+        errors: action.payload,
       };
 
     default:

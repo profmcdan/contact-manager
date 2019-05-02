@@ -16,13 +16,7 @@ class Contact extends Component {
   };
 
   onDeleteClick = async id => {
-    const { deleteContact } = this.props;
-    try {
-      axios.delete(`https://jsonplaceholder.typicode.com/users/${id}`);
-      deleteContact(id);
-    } catch (error) {
-      console.log("An error occred");
-    }
+    this.props.deleteContact(id);
   };
 
   render() {

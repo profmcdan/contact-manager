@@ -30,21 +30,10 @@ class AddContact extends Component {
       return;
     }
 
-    const { addContact } = this.props;
-
     const newContact = { name, email, phone };
-
-    try {
-      const { data } = await axios.post(
-        "https://jsonplaceholder.typicode.com/users",
-        newContact,
-      );
-      addContact(data);
-      this.setState({ name: "", phone: "", email: "", errors: {} });
-      this.props.history.push("/");
-    } catch (error) {
-      console.log(error);
-    }
+    this.props.addContact(newContact);
+    this.setState({ name: "", phone: "", email: "", errors: {} });
+    this.props.history.push("/");
   };
 
   handleChange = e => {

@@ -3,31 +3,60 @@ import {
   ADD_CONTACT,
   UPDATE_CONTACT,
   DELETE_CONTACT,
+  ERRORS,
 } from "./types";
+import axios from "axios";
 
-export const getContacts = () => {
-  return {
-    type: GET_CONTACTS,
-  };
+export const getContacts = () => async dispatch => {
+  try {
+    const res = await axios.get("https://jsonplaceholder.typicode.com/users");
+    dispatch({ type: GET_CONTACTS, payload: res.data });
+  } catch (error) {
+    dispatch({
+      type: ERRORS,
+      payload: { message: "There may be a network error", error: error },
+    });
+  }
 };
 
-export const addContact = payload => {
-  return {
-    type: ADD_CONTACT,
-    payload,
-  };
+export const addContact = contact => async dispatch => {
+  try {
+    const { data } = await axios.post(
+      "https://jsonplaceholder.typicode.com/users",
+      contact,
+    );
+    dispatch({ type: ADD_CONTACT, payload: data });
+  } catch (error) {
+    dispatch({
+      type: ERRORS,
+      payload: { message: "There may be a network error", error: error },
+    });
+  }
 };
 
-export const updateContact = payload => {
-  return {
-    type: UPDATE_CONTACT,
-    payload,
-  };
+export const updateContact = (id, contactInfo) => async dispatch => {
+  try {
+    const { data } = await axios.put(
+      `https://jsonplaceholder.typicode.com/users/${id}`,
+      contactInfo,
+    );
+    dispatch({ type: UPDATE_CONTACT, payload: data });
+  } catch (error) {
+    dispatch({
+      type: ERRORS,
+      payload: { message: "There may be a network error", error: error },
+    });
+  }
 };
 
-export const deleteContact = payload => {
-  return {
-    type: DELETE_CONTACT,
-    payload,
-  };
+export const deleteContact = id => async dispatch => {
+  try {
+    axios.delete(`https://jsonplaceholder.typicode.com/users/${id}`);
+    dispatch({ type: DELETE_CONTACT, payload: id });
+  } catch (error) {
+    dispatch({
+      type: ERRORS,
+      payload: { message: "There may be a network error", error: error },
+    });
+  }
 };

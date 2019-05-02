@@ -49,19 +49,10 @@ class EditContact extends Component {
       return;
     }
 
-    const updateContact = { name, email, phone };
-    try {
-      const { data } = await axios.put(
-        `https://jsonplaceholder.typicode.com/users/${id}`,
-        updateContact,
-      );
-      console.log(data);
-      this.props.updateContact(data);
-      this.setState({ name: "", phone: "", email: "", errors: {} });
-      this.props.history.push("/");
-    } catch (error) {
-      console.log(error);
-    }
+    const updateContactInfo = { name, email, phone };
+    this.props.updateContact(id, updateContactInfo);
+    this.setState({ name: "", phone: "", email: "", errors: {} });
+    this.props.history.push("/");
   };
 
   handleChange = e => {
