@@ -4,6 +4,7 @@ import {
   UPDATE_CONTACT,
   DELETE_CONTACT,
   ERRORS,
+  GET_CONTACT,
 } from "./types";
 import axios from "axios";
 
@@ -11,6 +12,20 @@ export const getContacts = () => async dispatch => {
   try {
     const res = await axios.get("https://jsonplaceholder.typicode.com/users");
     dispatch({ type: GET_CONTACTS, payload: res.data });
+  } catch (error) {
+    dispatch({
+      type: ERRORS,
+      payload: { message: "There may be a network error", error: error },
+    });
+  }
+};
+
+export const getContact = id => async dispatch => {
+  try {
+    const { data } = await axios.get(
+      `https://jsonplaceholder.typicode.com/users/${id}`,
+    );
+    dispatch({ type: GET_CONTACT, payload: data });
   } catch (error) {
     dispatch({
       type: ERRORS,

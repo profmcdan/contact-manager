@@ -2,9 +2,8 @@ import React, { Component } from "react";
 // import { Consumer } from "../../context";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { updateContact } from "../../actions/contactActions";
+import { updateContact, getContact } from "../../actions/contactActions";
 import TextInputGroup from "../common/TextInputGroup";
-import axios from "axios";
 
 class EditContact extends Component {
   state = {
@@ -17,19 +16,16 @@ class EditContact extends Component {
 
   async componentDidMount() {
     const { id } = this.props.match.params;
-    try {
-      const { data } = await axios.get(
-        `https://jsonplaceholder.typicode.com/users/${id}`,
-      );
-      const contact = data;
+    await this.props.getContact(id);
+    const { contact } = this.props;
+    console.log(this.props);
+    if (contact) {
       this.setState({
         name: contact.name,
         email: contact.email,
         phone: contact.phone,
         id: contact.id,
       });
-    } catch (error) {
-      console.log(error);
     }
   }
 
@@ -106,9 +102,15 @@ class EditContact extends Component {
 
 EditContact.propTypes = {
   updateContact: PropTypes.func.isRequired,
+  getContact: PropTypes.func.isRequired,
+  contact: PropTypes.object,
 };
 
+const mapStateToProps = state => ({
+  contact: state.contact.contact,
+});
+
 export default connect(
-  null,
-  { updateContact },
+  mapStateToProps,
+  { updateContact, getContact },
 )(EditContact);
